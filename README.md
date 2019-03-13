@@ -1,5 +1,5 @@
 # AKS_PrimeTest
-AKS Prime Test Python (Not parallelized, easy(not deterministik) implementation)
+AKS Prime Test Python (Not parallelized, easy(not deterministic) implementation)
 
 
 The Programm output primes form n to 1000000.
