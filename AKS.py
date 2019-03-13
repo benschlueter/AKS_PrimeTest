@@ -72,8 +72,7 @@ def step5(n, r):
 def aks(n):
     #print("Testing Number: "+str(n))
     if step1(n) == True:
-        #r = step2(n)
-        r = 5843
+        r = step2(n)
         if step3(n, r) != False:
             if step4(n, r) != True:
                 step5(n, r)
