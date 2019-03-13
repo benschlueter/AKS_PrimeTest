@@ -43,7 +43,7 @@ def step2(n):
 
 def step3 (n, r):
     for a in range(1,r+1):
-        if ((1 < math.gcd(a, n)) & (math.gcd(a,n) < n)):
+        if ((1 < math.gcd(a, n)) and (math.gcd(a,n) < n)):
             #print("[-]"+str(n)+" is no Prime 3")
             return False
 
