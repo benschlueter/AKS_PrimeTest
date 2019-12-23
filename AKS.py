@@ -63,30 +63,38 @@ def step5(n, r):
         rn = n
     threads = []
     ran = rn/8
-    #print("rn:",rn)
     ran = math.floor(ran)
     if ran==0:
-        ran = 1 
+        ran = 1
+
+    manager = multiprocessing.Manager()
+    return_dict = manager.dict()
+
     for a in range(0,rn,ran):
-        process = multiprocessing.Process(target=step5_check,args=(n,a,a+ran))
+        process = multiprocessing.Process(target=step5_check,args=(n,a,a+ran,return_dict))
         process.start()
         threads.append(process)
     for i in threads:
         i.join()
 
-    print("[+]"+str(n)+" is a Prime Number Step 5")
-    return True
+    if False not in return_dict.values():
+        print("[+]"+str(n)+" is a Prime Number Step 5")
+        return True
+    else:
+        return False
 
-def step5_check(n,unten,oben):
+def step5_check(n,unten,oben,return_dict):
+    x = unten/(oben-unten)
+    #print(x)
     if unten == 0:
         unten = 1
     for a in range(unten,oben):
-        b = exp_func(a,n,n) #((x + a) ** n) % n
-        #print(b)
+        b = exp_func(a,n,n) #((x + a) ** n) % n)
         if b - a != 0:
-            #print("[-]"+str(n)+" is no Prime 5")
+            return_dict[x]=False
             return False
 
+    return_dict[x]=True
     return True
 
 def aks(n):
@@ -99,12 +107,38 @@ def aks(n):
         if step3(n, r) != False:
             #print("step 4:")
             if step4(n, r) != True:
-                step5(n, r)
+                if True != step5(n, r):
+                    return False
+                else:
+                    return True
+            else: 
+                return False
+        else:
+            return False
+    else:
+        return False
 
+def trivial(n):
+    num = n
+    # To take input from the user
+    #num = int(input("Enter a number: "))
+    # prime numbers are greater than 1
+    if num ==2:
+        return True
+    if num > 1:
+        for i in range(2,num):
+            if (num % i) == 0:
+                return False
+                break
+        else:
+            return True
 
-
-#for i in range(2,100):
-#   aks(i)
-#aks(11)
+#print(trivial(9))
+for i in range(7138183,7138183+1000):
+    if aks(i)!= trivial(i):
+        print("Fehler bei Nummber: ",i)
+        print(aks(i))
+        break
+#aks(7138231)
 #print(100207100213100237100267*100207100213100237100267)
-aks(671998030559713968361666935769)
+#aks(671998030559713968361666935769)
