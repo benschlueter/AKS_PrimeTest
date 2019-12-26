@@ -1,6 +1,4 @@
 # AKS_PrimeTest
-AKS Prime Test Python (Not parallelized, wrong(not deterministic) implementation)
+AKS Prime Test Python ord (r) finder (step 2)  needs parallelization , implementation should be correct now if I got the math correctly.
 
-
-The Programm output primes form n to 1000000.
 You can edit the Code to test specific primes.
