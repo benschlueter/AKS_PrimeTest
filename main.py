@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/python3
+
 import math
 import multiprocessing
 
@@ -8,8 +9,8 @@ def exp_func(x, y, m):
     value = x
     for i in range(3, len(exp)):
         value = value * value % m
-        if(exp[i:i+1] == '1'):
-            value = value*x % m
+        if exp[i:i + 1] == '1':
+            value = value * x % m
     return value
 
 
@@ -22,16 +23,15 @@ def phi(n):
 
 
 def step1(n):
-    for b in range(2, int(math.log2(n)+1)):
-        a = n**(1/b)
+    for b in range(2, int(math.log2(n) + 1)):
+        a = n ** (1 / b)
         if math.floor(a) == a:
-            # print("[-]"+str(n)+" is no Prime 1")
             return False
     return True
 
 
 def step2(n):
-    mk = math.floor(math.log2(n)**2)
+    mk = math.floor(math.log2(n) ** 2)
     nexr = True
     r = 1
     while nexr is True:
@@ -39,35 +39,33 @@ def step2(n):
         nexr = False
         k = 0
         while k <= mk and nexr is False:
-            k = k+1
+            k = k + 1
             if exp_func(n, k, r) in (0, 1):
                 nexr = True
     return r
 
 
 def step3(n, r):
-    for a in range(1, r+1):
-        if ((1 < math.gcd(a, n)) and (math.gcd(a, n) < n)):
-            # print("[-]"+str(n)+" is no Prime 3")
+    for a in range(1, r + 1):
+        if (1 < math.gcd(a, n)) and (math.gcd(a, n) < n):
             return False
 
 
 def step4(n, r):
-    if n < 5690034:
-        if n <= r:
-            print("[+]"+str(n)+" is a Prime Step 4")
-            return True
-        else:
-            return False
+    if n <= r:
+        print("[+]" + str(n) + " is a Prime Step 4")
+        return True
+    else:
+        return False
 
 
 def step5(n, r):
     max = math.sqrt(phi(r))
-    rn = math.floor(max*math.log2(n))
+    rn = math.floor(max * math.log2(n))
     if rn > n:
         rn = n
     threads = []
-    ran = rn/8
+    ran = rn / 8
     ran = math.floor(ran)
     if ran == 0:
         ran = 1
@@ -76,21 +74,21 @@ def step5(n, r):
     return_dict = manager.dict()
 
     for a in range(0, rn, ran):
-        process = multiprocessing.Process(target=step5_check, args=(n, a, a+ran, return_dict))
+        process = multiprocessing.Process(target=step5_check, args=(n, a, a + ran, return_dict))
         process.start()
         threads.append(process)
     for i in threads:
         i.join()
 
     if False not in return_dict.values():
-        print("[+]"+str(n)+" is a Prime Number Step 5")
+        print("[+]" + str(n) + " is a Prime Number Step 5")
         return True
     else:
         return False
 
 
 def step5_check(n, unten, oben, return_dict):
-    x = unten/(oben-unten)
+    x = unten / (oben - unten)
     if unten == 0:
         unten = 1
     for a in range(unten, oben):
@@ -105,11 +103,8 @@ def step5_check(n, unten, oben, return_dict):
 
 def aks(n):
     if step1(n) is True:
-        # print("step 2:")
         r = step2(n)
-        # print("step 3:")
         if step3(n, r) is not False:
-            # print("step 4:")
             if step4(n, r) is not True:
                 if True is not step5(n, r):
                     return False
@@ -124,29 +119,19 @@ def aks(n):
 
 
 def trivial(n):
-    num = n
-    # To take input from the user
-    # num = int(input("Enter a number: "))
-    # prime numbers are greater than 1
-    if num == 2:
+    if n == 2:
         return True
-    if num > 1:
-        for i in range(2, num):
-            if (num % i) == 0:
-                return False
-                break
-        else:
-            return True
-
-
-def testinrange(x, y):
-    for i in range(x, y):
-        # print(i)
-        if aks(i) != trivial(i):
-            print("Error Number: ", i)
-            print(aks(i))
+    for i in range(2, int(math.sqrt(n)) + 1):
+        if n % i == 0:
             return False
-    return True
+    else:
+        return True
 
 
-testinrange(2, 1500)
+def main():
+    for i in range(2, 300):
+        assert aks(i) == trivial(i)
+
+
+if __name__ == '__main__':
+    main()
