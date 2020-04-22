@@ -2,16 +2,7 @@
 
 import math
 import multiprocessing
-
-
-def exp_func(x, y, m):
-    exp = bin(y)
-    value = x
-    for i in range(3, len(exp)):
-        value = value * value % m
-        if exp[i:i + 1] == '1':
-            value = value * x % m
-    return value
+from sys import argv
 
 
 def phi(n):
@@ -23,7 +14,7 @@ def phi(n):
 
 
 def step1(n):
-    for b in range(2, int(math.log2(n) + 1)):
+    for b in range(2, math.floor(math.log2(n) + 1)):
         a = n ** (1 / b)
         if math.floor(a) == a:
             return False
@@ -34,13 +25,13 @@ def step2(n):
     mk = math.floor(math.log2(n) ** 2)
     nexr = True
     r = 1
-    while nexr is True:
+    while nexr:
         r += 1
         nexr = False
         k = 0
-        while k <= mk and nexr is False:
+        while k <= mk and not nexr:
             k = k + 1
-            if exp_func(n, k, r) in (0, 1):
+            if pow(n, k, r) in (0, 1):
                 nexr = True
     return r
 
@@ -53,7 +44,7 @@ def step3(n, r):
 
 def step4(n, r):
     if n <= r:
-        print("[+]" + str(n) + " is a Prime Step 4")
+        print(f'{n} - prime. Step 4')
         return True
     else:
         return False
@@ -81,18 +72,18 @@ def step5(n, r):
         i.join()
 
     if False not in return_dict.values():
-        print("[+]" + str(n) + " is a Prime Number Step 5")
+        print(f'{n} - prime. Step 5')
         return True
     else:
         return False
 
 
-def step5_check(n, unten, oben, return_dict):
-    x = unten / (oben - unten)
-    if unten == 0:
-        unten = 1
-    for a in range(unten, oben):
-        b = exp_func(a, n, n)
+def step5_check(n, bot, top, return_dict):
+    x = bot / (top - bot)
+    if bot == 0:
+        bot = 1
+    for a in range(bot, top):
+        b = pow(a, n, n)
         if b - a != 0:
             return_dict[x] = False
             return False
@@ -121,7 +112,7 @@ def aks(n):
 def trivial(n):
     if n == 2:
         return True
-    for i in range(2, int(math.sqrt(n)) + 1):
+    for i in range(2, math.floor(math.sqrt(n)) + 1):
         if n % i == 0:
             return False
     else:
@@ -129,7 +120,7 @@ def trivial(n):
 
 
 def main():
-    for i in range(2, 300):
+    for i in range(int(argv[1]), int(argv[2])):
         assert aks(i) == trivial(i)
 
 
