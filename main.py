@@ -16,7 +16,7 @@ def phi(n):
 def step1(n):
     for b in range(2, math.floor(math.log2(n) + 1)):
         a = n ** (1 / b)
-        if math.floor(a) == a:
+        if a.is_integer():
             return False
     return True
 
@@ -115,8 +115,8 @@ def trivial(n):
     for i in range(2, math.floor(math.sqrt(n)) + 1):
         if n % i == 0:
             return False
-    else:
-        return True
+
+    return True
 
 
 def main():
