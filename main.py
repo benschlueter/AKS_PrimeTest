@@ -38,16 +38,16 @@ def step2(n):
 
 def step3(n, r):
     for a in range(1, r + 1):
-        if (1 < math.gcd(a, n)) and (math.gcd(a, n) < n):
+        if 1 < math.gcd(a, n) < n:
             return False
+    return True
 
 
 def step4(n, r):
     if n <= r:
-        print(f'{n} - prime. Step 4')
+        print(f"{n} - prime. Step 4")
         return True
-    else:
-        return False
+    return False
 
 
 def step5(n, r):
@@ -65,17 +65,18 @@ def step5(n, r):
     return_dict = manager.dict()
 
     for a in range(0, rn, ran):
-        process = multiprocessing.Process(target=step5_check, args=(n, a, a + ran, return_dict))
+        process = multiprocessing.Process(
+            target=step5_check, args=(n, a, a + ran, return_dict)
+        )
         process.start()
         threads.append(process)
     for i in threads:
         i.join()
 
     if False not in return_dict.values():
-        print(f'{n} - prime. Step 5')
+        print(f"{n} - prime. Step 5")
         return True
-    else:
-        return False
+    return False
 
 
 def step5_check(n, bot, top, return_dict):
@@ -87,26 +88,15 @@ def step5_check(n, bot, top, return_dict):
         if b - a != 0:
             return_dict[x] = False
             return False
-
     return_dict[x] = True
     return True
 
 
 def aks(n):
-    if step1(n) is True:
+    if step1(n):
         r = step2(n)
-        if step3(n, r) is not False:
-            if step4(n, r) is not True:
-                if True is not step5(n, r):
-                    return False
-                else:
-                    return True
-            else:
-                return True
-        else:
-            return False
-    else:
-        return False
+        return step3(n, r) and (step4(n, r) or step5(n, r))
+    return False
 
 
 def trivial(n):
@@ -115,7 +105,6 @@ def trivial(n):
     for i in range(2, math.floor(math.sqrt(n)) + 1):
         if n % i == 0:
             return False
-
     return True
 
 
@@ -124,5 +113,5 @@ def main():
         assert aks(i) == trivial(i)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
